@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "39003958038",
+    "firebase_url": "https://apolloforensicsamplecollection.firebaseio.com",
+    "project_id": "apolloforensicsamplecollection",
+    "storage_bucket": "apolloforensicsamplecollection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39003958038:android:bc23e8dbc46bd472363e37",
+        "android_client_info": {
+          "package_name": "com.apollo.apolloForensicSampleCollecting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39003958038-h5h6mrlngeurt91hs5kl3i8nh580op2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOVfqxjZ162_KhZuVjt70NiyG-ckAp7Q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39003958038-h5h6mrlngeurt91hs5kl3i8nh580op2o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
