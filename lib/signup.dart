@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'signup.dart';
+import 'main.dart';
 import 'test.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,49 +21,37 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyLoginPage(),
+      home: MySignupPage(),
     );
   }
 }
 
-class MyLoginPage extends StatefulWidget {
+class MySignupPage extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<MyLoginPage> {
+class _State extends State<MySignupPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool showProgress = false;
   final _auth = FirebaseAuth.instance;
-
-  SharedPreferences logindata;
-  bool newuser;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    check_if_already_login();
-  }
-
-  void check_if_already_login() async {
-    logindata = await SharedPreferences.getInstance();
-    newuser = (logindata.getBool('login') ?? true);
-    print(newuser);
-    if (newuser == false) {
-      Navigator.pushReplacement(
-          context, new MaterialPageRoute(builder: (context) => FormWidgetsDemo()));
-    }
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    nameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  // SharedPreferences logindata;
+  // String username;
+  //
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   initial();
+  // }
+  //
+  // void initial() async {
+  //   logindata = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     username = logindata.getString('username');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +67,7 @@ class _State extends State<MyLoginPage> {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(10),
                     child: Text(
-                      'Login Page',
+                      'Sign Up Page',
                       style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.w500,
@@ -123,18 +111,21 @@ class _State extends State<MyLoginPage> {
                     child: RaisedButton(
                       textColor: Colors.white,
                       color: Colors.blue,
-                      child: Text('Login'),
+                      child: Text('Sign up'),
                       onPressed: () async {
                         setState(() {
                           showProgress = true;
                         });
                         try {
-                          final newUser = await _auth.signInWithEmailAndPassword(
+                          final newUser = await _auth.createUserWithEmailAndPassword(
                               email: nameController.text, password: passwordController.text);
                           print(newUser.toString());
                           if (newUser != null) {
-                            logindata.setBool('login', false);
-                            logindata.setString('username', nameController.text);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyLoginPage()),
+                            );
                             Fluttertoast.showToast(
                                 msg: "Login Successfull",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -146,10 +137,6 @@ class _State extends State<MyLoginPage> {
                             setState(() {
                               showProgress = false;
                             });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FormWidgetsDemo()));
                           }
                         } catch (e) {
                           Fluttertoast.showToast(
@@ -166,18 +153,18 @@ class _State extends State<MyLoginPage> {
                 Container(
                     child: Row(
                       children: <Widget>[
-                        Text('Does not have account?'),
+                        Text('Have account?'),
                         FlatButton(
                           textColor: Colors.blue,
                           child: Text(
-                            'Sign up',
+                            'Sign in',
                             style: TextStyle(fontSize: 20),
                           ),
                           onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                builder: (context) => MySignupPage()));
+                                    builder: (context) => MyLoginPage()));
                           },
                         )
                       ],
