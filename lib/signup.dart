@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
-import 'test.dart';
+import 'project.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,7 +76,8 @@ class _State extends State<MySignupPage> {
                 Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(10),
-                    child: Image.network('http://www.naturalgasasia.com/content/14941/New-South-Wales-Government-Logo1_550x300.jpg')),
+                    child: Image.network(
+                        'http://www.naturalgasasia.com/content/14941/New-South-Wales-Government-Logo1_550x300.jpg')),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
@@ -99,7 +100,7 @@ class _State extends State<MySignupPage> {
                   ),
                 ),
                 FlatButton(
-                  onPressed: (){
+                  onPressed: () {
                     //forgot password screen
                   },
                   textColor: Colors.blue,
@@ -117,8 +118,10 @@ class _State extends State<MySignupPage> {
                           showProgress = true;
                         });
                         try {
-                          final newUser = await _auth.createUserWithEmailAndPassword(
-                              email: nameController.text, password: passwordController.text);
+                          final newUser =
+                              await _auth.createUserWithEmailAndPassword(
+                                  email: nameController.text,
+                                  password: passwordController.text);
                           print(newUser.toString());
                           if (newUser != null) {
                             Navigator.push(
@@ -152,24 +155,24 @@ class _State extends State<MySignupPage> {
                     )),
                 Container(
                     child: Row(
-                      children: <Widget>[
-                        Text('Have account?'),
-                        FlatButton(
-                          textColor: Colors.blue,
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyLoginPage()));
-                          },
-                        )
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    ))
+                  children: <Widget>[
+                    Text('Have account?'),
+                    FlatButton(
+                      textColor: Colors.blue,
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyLoginPage()));
+                      },
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ))
               ],
             )));
   }

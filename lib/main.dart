@@ -1,8 +1,9 @@
+import 'package:apolloForensicSampleCollection/home.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup.dart';
-import 'test.dart';
+import 'project.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,12 +18,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Apollo Forensic Sample Collecting',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyLoginPage(),
-    );
+        title: 'Apollo Forensic Sample Collecting',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyLoginPage(),
+        routes: {
+          '/login': (context) => MyLoginPage(),
+          '/homepage': (context) => MyHomePage(),
+          '/project': (context) => ProjectPage(),
+        });
   }
 }
 
@@ -53,7 +58,7 @@ class _State extends State<MyLoginPage> {
     print(newuser);
     if (newuser == false) {
       Navigator.pushReplacement(
-          context, new MaterialPageRoute(builder: (context) => FormWidgetsDemo()));
+          context, new MaterialPageRoute(builder: (context) => MyHomePage()));
     }
   }
 
@@ -88,7 +93,8 @@ class _State extends State<MyLoginPage> {
                 Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(10),
-                    child: Image.network('http://www.naturalgasasia.com/content/14941/New-South-Wales-Government-Logo1_550x300.jpg')),
+                    child: Image.network(
+                        'http://www.naturalgasasia.com/content/14941/New-South-Wales-Government-Logo1_550x300.jpg')),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
@@ -111,7 +117,7 @@ class _State extends State<MyLoginPage> {
                   ),
                 ),
                 FlatButton(
-                  onPressed: (){
+                  onPressed: () {
                     //forgot password screen
                   },
                   textColor: Colors.blue,
@@ -129,12 +135,15 @@ class _State extends State<MyLoginPage> {
                           showProgress = true;
                         });
                         try {
-                          final newUser = await _auth.signInWithEmailAndPassword(
-                              email: nameController.text, password: passwordController.text);
+                          final newUser =
+                              await _auth.signInWithEmailAndPassword(
+                                  email: nameController.text,
+                                  password: passwordController.text);
                           print(newUser.toString());
                           if (newUser != null) {
                             logindata.setBool('login', false);
-                            logindata.setString('username', nameController.text);
+                            logindata.setString(
+                                'username', nameController.text);
                             Fluttertoast.showToast(
                                 msg: "Login Successfull",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -146,10 +155,8 @@ class _State extends State<MyLoginPage> {
                             setState(() {
                               showProgress = false;
                             });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => FormWidgetsDemo()));
+                            Navigator.pushReplacementNamed(
+                                context, '/homepage');
                           }
                         } catch (e) {
                           Fluttertoast.showToast(
@@ -165,24 +172,21 @@ class _State extends State<MyLoginPage> {
                     )),
                 Container(
                     child: Row(
-                      children: <Widget>[
-                        Text('Does not have account?'),
-                        FlatButton(
-                          textColor: Colors.blue,
-                          child: Text(
-                            'Sign up',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                builder: (context) => MySignupPage()));
-                          },
-                        )
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    ))
+                  children: <Widget>[
+                    Text('Does not have account?'),
+                    FlatButton(
+                      textColor: Colors.blue,
+                      child: Text(
+                        'Sign up',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/homepage');
+                      },
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ))
               ],
             )));
   }
