@@ -6,12 +6,13 @@ import 'project.dart';
 import 'main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'signin.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: MyApp(),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: MyApp(),
+//   ));
+// }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

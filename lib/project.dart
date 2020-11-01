@@ -3,9 +3,13 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:apolloForensicSampleCollection/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'signin.dart';
 
 class ProjectPage extends StatefulWidget {
   @override
@@ -13,7 +17,8 @@ class ProjectPage extends StatefulWidget {
 }
 
 class _ProjectPageState extends State<ProjectPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey00 = GlobalKey<FormState>();
+  final _formKey01 = GlobalKey<FormState>();
   String title = '';
   String description = '';
   DateTime date = DateTime.now();
@@ -38,8 +43,14 @@ class _ProjectPageState extends State<ProjectPage> {
     });
   }
 
+  String classValue = 'Others';
+  String urgentValue = 'No';
+  String extStorage = 'No';
+  var binaryValue = {'Yes', 'No'};
+
   @override
   Widget build(BuildContext context) {
+    final project = FirebaseFirestore.instance.collection('project');
     return Scaffold(
         appBar: AppBar(
           title: Text('New Project'),
@@ -47,7 +58,7 @@ class _ProjectPageState extends State<ProjectPage> {
         body: ListView(
           children: <Widget>[
             Form(
-              key: _formKey,
+              key: _formKey01,
               child: Scrollbar(
                 child: Align(
                   alignment: Alignment.topCenter,
@@ -57,15 +68,20 @@ class _ProjectPageState extends State<ProjectPage> {
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 400),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ...[
+                              new Container(
+                                  decoration:
+                                      new BoxDecoration(color: Colors.blue),
+                                  child: new ListTile(
+                                      title: Text("Incident Details"))),
                               TextFormField(
                                 decoration: InputDecoration(
                                   filled: true,
-                                  hintText: 'Enter a title...',
-                                  labelText: 'Title',
+                                  hintText: 'Address...',
+                                  labelText: 'Location',
                                 ),
                                 onChanged: (value) {
                                   setState(() {
@@ -73,80 +89,120 @@ class _ProjectPageState extends State<ProjectPage> {
                                   });
                                 },
                               ),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  border: const OutlineInputBorder(),
-                                  filled: true,
-                                  hintText: 'Enter a description...',
-                                  labelText: 'Description',
-                                ),
-                                onChanged: (value) {
-                                  description = value;
-                                },
-                                maxLines: 5,
-                              ),
-                              _FormDatePicker(
-                                date: date,
-                                onChanged: (value) {
-                                  setState(() {
-                                    date = value;
-                                  });
-                                },
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Estimated value',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
+                              Text('Classification'),
+                              FutureBuilder<DocumentSnapshot>(
+                                future: project.doc('classification').get(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Text("Something went wrong");
+                                  }
+
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    Map<String, dynamic> data =
+                                        snapshot.data.data();
+                                    print(data.values);
+                                    return Theme(
+                                      data: Theme.of(context).copyWith(
+                                          canvasColor: Colors.lightBlue),
+                                      child: DropdownButtonFormField(
+                                        style: TextStyle(color: Colors.white70),
+                                        value: classValue,
+                                        items: data.values
+                                            .map((value) => DropdownMenuItem(
+                                                child: Text(
+                                                  value,
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                                value: value))
+                                            .toList(),
+                                        onChanged: (val) => setState(() {
+                                          classValue = val;
+                                        }),
                                       ),
-                                    ],
-                                  ),
-                                  Text(
-                                    intl.NumberFormat.currency(
-                                            symbol: "\$", decimalDigits: 0)
-                                        .format(maxValue),
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  Slider(
-                                    min: 0,
-                                    max: 500,
-                                    divisions: 500,
-                                    value: maxValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        maxValue = value;
-                                      });
-                                    },
-                                  ),
-                                ],
+                                    );
+                                  }
+                                  return Text("loading");
+                                },
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Checkbox(
-                                    value: brushedTeeth,
-                                    onChanged: (checked) {
-                                      setState(() {
-                                        brushedTeeth = checked;
-                                      });
-                                    },
-                                  ),
-                                  Text('Brushed Teeth',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1),
+                                children: <Widget>[
+                                  if (classValue == 'Others')
+                                    new Flexible(
+                                        child: new TextFormField(
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        hintText: 'Please specify...',
+                                        labelText: 'Other classifications',
+                                      ),
+                                      onChanged: (value) {
+                                        value = value;
+                                      },
+                                    ))
                                 ],
                               ),
+                              Text('Urgent?'),
+                              Theme(
+                                data: Theme.of(context)
+                                    .copyWith(canvasColor: Colors.lightBlue),
+                                child: DropdownButtonFormField(
+                                  style: TextStyle(color: Colors.white70),
+                                  value: urgentValue,
+                                  items: binaryValue
+                                      .map((value) => DropdownMenuItem(
+                                          child: Text(
+                                            value,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          value: value))
+                                      .toList(),
+                                  onChanged: (val) => setState(() {
+                                    urgentValue = val;
+                                  }),
+                                ),
+                              ),
+                              Text('Extended Sample Storage?'),
+                              Theme(
+                                data: Theme.of(context)
+                                    .copyWith(canvasColor: Colors.lightBlue),
+                                child: DropdownButtonFormField(
+                                  style: TextStyle(color: Colors.white70),
+                                  value: extStorage,
+                                  items: binaryValue
+                                      .map((value) => DropdownMenuItem(
+                                          child: Text(
+                                            value,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          value: value))
+                                      .toList(),
+                                  onChanged: (val) => setState(() {
+                                    extStorage = val;
+                                  }),
+                                ),
+                              ),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.start,
+                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //   children: [
+                              //     Checkbox(
+                              //       value: brushedTeeth,
+                              //       onChanged: (checked) {
+                              //         setState(() {
+                              //           brushedTeeth = checked;
+                              //         });
+                              //       },
+                              //     ),
+                              //     Text('Brushed Teeth',
+                              //         style: Theme.of(context)
+                              //             .textTheme
+                              //             .subtitle1),
+                              //   ],
+                              // ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -186,7 +242,7 @@ class _ProjectPageState extends State<ProjectPage> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: MaterialButton(
-                    color: Colors.red,
+                    color: Colors.white,
                     onPressed: () {
                       logindata.setBool('login', true);
                       Navigator.push(
@@ -198,6 +254,18 @@ class _ProjectPageState extends State<ProjectPage> {
           ],
         ));
   }
+
+  Widget othersTextField = new Flexible(
+      child: new TextFormField(
+    decoration: InputDecoration(
+      filled: true,
+      hintText: 'Please specify...',
+      labelText: 'Other classifications',
+    ),
+    onChanged: (value) {
+      value = value;
+    },
+  ));
 }
 
 class _FormDatePicker extends StatefulWidget {
