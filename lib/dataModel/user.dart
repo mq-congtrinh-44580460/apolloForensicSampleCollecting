@@ -1,5 +1,3 @@
-import 'package:dartz/dartz.dart';
-
 class User {
   String firstName;
   String lastName;
@@ -7,12 +5,7 @@ class User {
   String privilege;
   var projects = new List();
 
-  User(String fName, String lName, String govID, String priviledge) {
-    this.firstName = fName;
-    this.lastName = lName;
-    this.govID = govID;
-    this.privilege = privilege;
-  }
+  User(this.firstName, this.lastName, this.govID, this.privilege);
 
   List getProjects() {
     return this.projects;
@@ -44,7 +37,4 @@ class Admin extends User {
       : super(fName, lName, govID, "god");
 }
 
-void main() {
-  Admin ben = new Admin('Ben', 'Trinh', '6969');
-  print(ben.firstName);
-}
+Admin ben = Admin('Ben', 'Trinh', '6969');

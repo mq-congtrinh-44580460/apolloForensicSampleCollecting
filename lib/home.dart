@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'signup.dart';
 import 'project.dart';
+import 'dataModel/document.dart';
 import 'main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,25 +16,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 //   ));
 // }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Apollo Forensic Sample Collecting',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MyHomePage(),
-        routes: {
-          '/login': (context) => MyLoginPage(),
-          '/homepage': (context) => MyHomePage(),
-          '/project': (context) => ProjectPage()
-        });
-  }
-}
+// class MyApp extends StatelessWidget {
+//   // This widget is the root of your application.
+//   static final routeName = '/homepage';
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider<ProjectModel>(
+//         create: (contetxt) => ProjectModel(),
+//         child: MaterialApp(
+//             title: 'Apollo Forensic Sample Collecting',
+//             theme: ThemeData(
+//               primarySwatch: Colors.blue,
+//             ),
+//             home: MyHomePage(),
+//             routes: {
+//               '/login': (context) => MyLoginPage(),
+//               MyApp.routeName: (context) => MyHomePage(),
+//               '/project': (context) => ProjectPage()
+//             }));
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
+  static final routeName = '/homepage';
   @override
   _State createState() => _State();
 }

@@ -12,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'signin.dart';
 
 class ProjectPage extends StatefulWidget {
+  static final routeName = '\project';
   @override
   _ProjectPageState createState() => _ProjectPageState();
 }

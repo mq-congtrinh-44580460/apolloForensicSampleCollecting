@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'signup.dart';
 import 'project.dart';
+import 'home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
         home: MyLoginPage(),
         routes: {
           '/login': (context) => MyLoginPage(),
-          '/homepage': (context) => MyHomePage(),
-          '/project': (context) => ProjectPage(),
+          MyHomePage.routeName: (context) => MyHomePage(),
+          ProjectPage.routeName: (context) => ProjectPage(),
         });
   }
 }
